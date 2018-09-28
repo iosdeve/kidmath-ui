@@ -1,0 +1,186 @@
+
+<section>
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-2 col-sm-2 col-md-2">
+          <div style="margin: 10px 0px;">
+            <button class="btn btn-default" [routerLink]="['/']">
+              <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+        <div class="col-xs-10 col-sm-10 col-md-10">
+          <div class="titleInfo">
+            <span> 第{{total==0 ? 0 : total-mathItems?.length+1}}题，共{{total}}题</span>
+          </div>
+
+          <div class="titleInfo">
+            <span class="glyphicon glyphicon-ok titleicon1" aria-hidden="true">
+            </span>
+            <span class="titleicon1"> {{rightAnswerCount}}题 &nbsp;&nbsp;</span>
+            <span class="glyphicon glyphicon-remove titleicon2" aria-hidden="true">
+            </span>
+            <span class="titleicon2">{{errorAnswerCount}}题</span>
+          </div>
+
+          <div class="titleInfo">
+            <app-time #time></app-time>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-1 col-sm-1 col-md-1"></div>
+        <div class="col-xs-2 col-sm-2 col-md-2">
+          <div class="numcontainer">
+            <div class="opersymbol">{{mathItems == null ? '?' : mathItems[0][0]}}</div>
+          </div>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2">
+          <div class="numcontainer">
+            <div class="opersymbol">{{mathItems && mathItems[0][3] ==0 ? "+" : "-"}}</div>
+          </div>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2">
+          <div class="numcontainer">
+            <div class="opersymbol">{{mathItems == null ? '?' : mathItems[0][1]}}</div>
+          </div>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2">
+          <div class="numcontainer">
+            <div class="opersymbol">=</div>
+          </div>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2">
+          <div class="numcontainer" id="resultCard">
+            <div class="opersymbol">?</div>
+          </div>
+        </div>
+        <div class="col-xs-1 col-sm-1 col-md-1"></div>
+      </div>
+      <div class="row">
+        <div style="height: 50px"></div>
+      </div>
+      <div class="row">
+        <div class="col-xs-2 col-sm-2 col-md-2" id="mytest"></div>
+        <div class="col-xs-2 col-sm-2 col-md-2" *ngFor="let answer of answers">
+          <div class="numcontainer" (click)="clickAnswer(answer, $event)">
+            <div class="opersymbol">{{answer}}</div>
+          </div>
+        </div>
+
+        <div class="col-xs-2 col-sm-2 col-md-2"></div>
+      </div>
+    </div>
+  </section>
+
+<div class="modal fade" id="testResultModel">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body">
+        <app-stars style="font-size:25px" [rating]="starsRating"></app-stars>
+        <div style="text-align: center;">
+            <span class="glyphicon glyphicon-ok titleicon1" aria-hidden="true">
+            </span>
+          <span class="titleicon1"> {{rightAnswerCount}}题 &nbsp;&nbsp;</span>
+          <span class="glyphicon glyphicon-remove titleicon2" aria-hidden="true">
+            </span>
+          <span class="titleicon2">{{errorAnswerCount}}题</span>
+        </div>
+        <div style="text-align: center; font-size:20px">
+          <button class="btn btn-link"><span class="glyphicon glyphicon-time" aria-hidden="true"></span></button>
+          <span>{{timeComponent.minStr}}</span>
+          <span>:</span>
+          <span>{{timeComponent.secStr}}</span>
+          <span>:</span>
+          <span>{{timeComponent.msStr}}</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn" data-dismiss="modal" (click)="showSettingModel()">
+          <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="btn" data-dismiss="modal" (click)="repeatMathItems()">
+          <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="prepareMath">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">新建数学题</h5>
+      </div>
+      <form class="modal-body form-horizontal" role="form">
+        <div class="form-group">
+          <label class="col-sm-4 control-label">范围</label>
+          <div class="col-sm-8">
+            <select id="resultRange" class="form-control" [(ngModel)]="selectedRange" name="resultRange">
+              <option *ngFor="let rangeItem of rangeList" [ngValue]="rangeItem">
+                {{rangeItem.description}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" [hidden]="!(selectedRange.description=='自定义范围')">
+          <label class="col-sm-4 control-label">开始</label>
+          <div class="col-sm-8">
+            <div class="input-group input-group-option quantity-wrapper" style="width:130px;">
+              <span class="input-group-addon input-group-addon-remove quantity-remove btn" (click)="removeCountClick('begin')">
+                <span class="glyphicon glyphicon-minus"></span>
+              </span>
+              <input type="text"  name="beginRange" class="form-control quantity-count" [(ngModel)]="selectedRange.begin">
+              <span class="input-group-addon input-group-addon-remove quantity-add btn" (click)="addCountClick('begin')">
+                <span class="glyphicon glyphicon-plus"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" [hidden]="!(selectedRange.description=='自定义范围')">
+          <label class="col-sm-4 control-label">结束</label>
+          <div class="col-sm-8">
+            <div class="input-group input-group-option quantity-wrapper" style="width:130px;">
+              <span class="input-group-addon input-group-addon-remove quantity-remove btn" (click)="removeCountClick('end')">
+                <span class="glyphicon glyphicon-minus"></span>
+              </span>
+              <input type="text" name="endRange" class="form-control quantity-count" [(ngModel)]="selectedRange.end">
+              <span class="input-group-addon input-group-addon-remove quantity-add btn" (click)="addCountClick('end')">
+                <span class="glyphicon glyphicon-plus"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-4 control-label">运算类型</label>
+          <div class="col-sm-8">
+              <label class="checkbox-inline">
+                <input type="checkbox" #checkboxAdd checked value="1" (click)="operSymbolChange(checkboxAdd.checked ? checkboxAdd.value : '-1')">加法
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" #checkboxSubstract checked value="2" (click)="operSymbolChange(checkboxSubstract.checked ? checkboxSubstract.value : '-2')">减法
+              </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-4 control-label">题目数量</label>
+          <div class="col-sm-8">
+            <div class="input-group input-group-option quantity-wrapper" style="width:130px;">
+              <span class="input-group-addon input-group-addon-remove quantity-remove btn" (click)="removeCountClick('countItems')">
+                <span class="glyphicon glyphicon-minus"></span>
+              </span>
+              <input type="text" name="countItem" class="form-control quantity-count" [(ngModel)]="selectedRange.countItems">
+              <span class="input-group-addon input-group-addon-remove quantity-add btn"  (click)="addCountClick('countItems')">
+                <span class="glyphicon glyphicon-plus"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" name="ok" (click)="generateMathItems()">确定</button>
+      </div>
+    </div>
+  </div>
+</div>

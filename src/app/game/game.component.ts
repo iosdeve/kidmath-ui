@@ -29,22 +29,17 @@ export class GameComponent implements OnInit {
   rangeList: Array<ResultRange> = new Array();
   selectedRange: ResultRange = new ResultRange();
 
+  //input content
+  inputAnswer: string ="?";
+
+  gameType:string='1';
+
   @ViewChild('time') timeComponent: TimeComponent;
 
 
   constructor(private pubService: PublicService, private activatedRoute: ActivatedRoute, private router: Router) {
     this.initListbox();
-    // this.router.events
-    //   .subscribe((event) => {
-    //     if (event instanceof NavigationEnd) {
-    //       $('body').css('background','url(/assets/images/bg.png)');
-    //     }else if(event instanceof NavigationStart ){
-    //       $('body').css('background','');
-    //     }
-    //   });
-    // this.mathItems=this.pubService.buildMathItems(5,10,3,this.total);
-    // this.answers=this.pubService.getRadomAnwser(5,10,this.mathItems[0][2]);
-    // console.log(this.mathItems[0][0]+","+this.mathItems[0][1]+","+this.mathItems[0][2]);
+    this.gameType = activatedRoute.snapshot.paramMap.get('id');
   }
 
   ngOnInit() {
@@ -64,9 +59,27 @@ export class GameComponent implements OnInit {
       $('#prepareMath').modal({backdrop: 'static', keyboard: false});
     }
 
+    this.notAllowScale();
   }
 
+  notAllowScale(){
+    window.onload= () =>{
+      document.addEventListener('touchstart', (event) =>{
+        if(event.touches.length>1){
+          event.preventDefault();
+        }
+      })
+      var lastTouchEnd=0;
+      document.addEventListener('touchend',(event)=> {
+        var now=(new Date()).getTime();
+        if(now-lastTouchEnd<=300){
+          event.preventDefault();
+        }
+        lastTouchEnd=now;
+      },false)
+    }
 
+  }
 
   clickAnswer(answer: number, event: any){
     if(this.clickFinish==false){
@@ -171,5 +184,50 @@ export class GameComponent implements OnInit {
   generateMathItems(){
     this.pubService.navEvent.emit(this.selectedRange);
     $('#prepareMath').modal('hide');
+  }
+
+  clickNumberBtn(num: number){
+    if(this.inputAnswer.length>2){
+      return;
+    }
+    if("?"==this.inputAnswer){
+      this.inputAnswer='';
+    }
+    this.inputAnswer+=String(num);
+  }
+
+  resetInputAnswer(){
+    this.inputAnswer='?';
+  }
+
+  confirmInputAnswer(){
+    if(this.clickFinish==false){
+      return;
+    }
+    this.clickFinish=false;
+    if(this.mathItems[0][2]==parseInt(this.inputAnswer)){
+      if (this.previousItems !=this.mathItems[0]) {
+        this.rightAnswerCount++;
+        layer.msg('答对',{icon: 6, time: 800});
+      }
+      this.inputAnswer='?';
+      this.previousItems = this.mathItems[0];
+      if(this.mathItems.length==1){
+        this.starsRating=this.rightAnswerCount/(this.rightAnswerCount+this.errorAnswerCount)*5;
+        this.timeComponent.stop();
+        $('#testResultModel').modal({backdrop: 'static', keyboard: false});
+        return;
+      }
+      this.mathItems.shift();
+      this.clickFinish=true;
+    }else{
+      this.clickFinish=true;
+      layer.msg('错啦',{icon: 5, time: 800});
+      this.inputAnswer='?';
+      if (this.previousItems !=this.mathItems[0]) {
+        this.errorAnswerCount++;
+        this.previousItems = this.mathItems[0];
+      }
+    }
   }
 }

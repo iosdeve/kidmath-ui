@@ -59,6 +59,17 @@
   color:#0E78C6
 }
 
+.btn-num{
+  margin:5px 5px;
+}
+
+.container-num{
+  margin: 0 auto;
+  width:fit-content;
+  width:-webkit-fit-content;
+  width:-moz-fit-content;
+}
+
 /* 小屏幕（平板，大于等于 768px） */
 @media (min-width: 736px) {
   .numcontainer {

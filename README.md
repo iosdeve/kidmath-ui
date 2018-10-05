@@ -1,27 +1,22 @@
-# KidmathUi
+## 项目介绍
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.4.
+如果你们家有上幼儿园的小朋友，如果你也正在教孩子学习算术，我想你一定遇到下面的问题
 
-## Development server
+> 在辅导孩子学习算术的时候，为了避免小朋友忘记前面的学习，要经常的出一些算术题目给孩子做，不管是写在纸上的试题形式或者口头提问的形式
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+为了节省时间同时也为了帮助小朋友快速的学习算术知识，增加学习的趣味性，所以就开发了这个算术学习小工具
 
-## Code scaffolding
+## 项目演示
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+##### 演示网址: [http://kidsmath.stevenxin.com](http://kidsmath.stevenxin.com)
 
-## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+![image](https://i.loli.net/2018/10/05/5bb70f95b4641.gif)
 
-## Running unit tests
+## 用到的框架
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+1. Angular5
+2. Typescript
+3. Bootstrap
+4. JQuery
+5. Layer

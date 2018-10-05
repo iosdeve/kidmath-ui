@@ -60,7 +60,7 @@
       <div class="row">
         <div style="height: 50px"></div>
       </div>
-      <div class="row" [hidden]="gameType==1? false : true">
+      <div class="row" [hidden]="gameType=='1'? false : true">
         <div class="col-xs-2 col-sm-2 col-md-2"></div>
         <div class="col-xs-2 col-sm-2 col-md-2" *ngFor="let answer of answers">
           <div class="numcontainer" (click)="clickAnswer(answer, $event)">
@@ -69,7 +69,7 @@
         </div>
         <div class="col-xs-2 col-sm-2 col-md-2"></div>
       </div>
-      <div class="row" [hidden]="gameType==2? false : true">
+      <div class="row" [hidden]="gameType=='2'? false : true">
         <div class="col-xs-12 col-sm-12 col-md-12">
           <div class="container-num">
             <button class="btn btn-default btn-num btn-lg" *ngFor="let num of [1,2,3,4,5]" (click)="clickNumberBtn(num)">{{num}}</button>
@@ -80,7 +80,7 @@
           <div class="container-num">
             <button class="btn btn-default btn-num btn-lg" *ngFor="let num of [6,7,8,9,0]" (click)="clickNumberBtn(num)">{{num}}</button>
             <button class="btn btn-success btn-num btn-lg" (click)="confirmInputAnswer()">
-              <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+              <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
             </button>
           </div>
         </div>
